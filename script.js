@@ -95,6 +95,18 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Tombol untuk toggle mode gelap/terang
-document.getElementById("toggleDarkMode").addEventListener("click", function () {
-	document.documentElement.classList.toggle("dark");
+const toggleButton = document.getElementById("toggleDarkMode");
+
+// Inisialisasi teks saat halaman pertama kali dimuat
+document.addEventListener("DOMContentLoaded", function () {
+    const isDark = document.documentElement.classList.contains("dark");
+    toggleButton.innerHTML = isDark ? "☀️ Mode Terang" : "🌙 Mode Gelap";
+});
+
+// Saat tombol diklik, ubah tema dan teks tombol
+toggleButton.addEventListener("click", function () {
+    const htmlEl = document.documentElement;
+    const isDark = htmlEl.classList.toggle("dark");
+
+    toggleButton.innerHTML = isDark ? "☀️ Mode Terang" : "🌙 Mode Gelap";
 });
