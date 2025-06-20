@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
 	const form = document.getElementById('paymentForm');
 	const transactionList = document.getElementById('transactionList');
 	const totalTransactions = document.getElementById('totalTransactions');
@@ -9,13 +9,22 @@ document.addEventListener('DOMContentLoaded', function () {
 	let currentDiscount = 0;
 
 	const promoCodes = {
-		"HEMAT10": { type: "percent", value: 10 },
-		"DISKON50": { type: "flat", value: 50000 },
-		"GRATISONGKIR": { type: "flat", value: 25000 }
+		"HEMAT10": {
+			type: "percent",
+			value: 10
+		},
+		"DISKON50": {
+			type: "flat",
+			value: 50000
+		},
+		"GRATISONGKIR": {
+			type: "flat",
+			value: 25000
+		}
 	};
 
 	// Promo code handler
-	document.getElementById('applyPromoBtn').addEventListener('click', function () {
+	document.getElementById('applyPromoBtn').addEventListener('click', function() {
 		const code = document.getElementById('promoCode').value.trim().toUpperCase();
 		const productSelect = form.productSelect;
 		const price = parseInt(productSelect.options[productSelect.selectedIndex]?.getAttribute('data-price')) || 0;
@@ -50,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.getElementById("totalAmount").textContent = `Rp ${totalAmount.toLocaleString('id-ID')}`;
 	});
 
-	form.addEventListener('submit', function (e) {
+	form.addEventListener('submit', function(e) {
 		e.preventDefault();
 
 		const name = form.customerName.value;
@@ -128,6 +137,23 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.getElementById('paymentModal').classList.add('hidden');
 	});
 
+
+	function updatePriceDisplay() {
+		const productSelect = form.productSelect;
+		const quantity = parseInt(form.quantity.value) || 1;
+		const selectedOption = productSelect.options[productSelect.selectedIndex];
+		const price = parseInt(selectedOption?.getAttribute('data-price')) || 0;
+		const subtotal = price * quantity;
+		const total = Math.max(0, subtotal - currentDiscount);
+
+		document.getElementById("subtotal").textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+		document.getElementById("totalAmount").textContent = `Rp ${total.toLocaleString('id-ID')}`;
+	}
+
+	form.productSelect.addEventListener('change', updatePriceDisplay);
+	form.quantity.addEventListener('input', updatePriceDisplay);
+
+
 	// Inisialisasi teks toggle saat pertama kali
 	const toggleButton = document.getElementById("toggleDarkMode");
 	const isDark = document.documentElement.classList.contains("dark");
@@ -142,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		toggleButton.innerHTML = "🌙 Mode Gelap";
 	}
 
-	toggleButton.addEventListener("click", function () {
+	toggleButton.addEventListener("click", function() {
 		const htmlEl = document.documentElement;
 		const isDark = htmlEl.classList.toggle("dark");
 		localStorage.theme = isDark ? "dark" : "light";
